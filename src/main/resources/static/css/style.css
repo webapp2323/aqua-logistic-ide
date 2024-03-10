@@ -1,0 +1,269 @@
+html, body {
+    font-size: 100%;
+    background: rgb(4,15,153);
+    background: linear-gradient(90deg, rgba(4,15,153,1) 0%, rgba(153,0,255,1) 38%, rgba(166,11,171,1) 75%);   
+}
+
+.product { 
+    box-shadow: -1px 1px 3px #c6c6c6;
+    text-shadow: -1px 1px 3px #c6c6c6;
+    cursor: pointer;
+    transition: transform 2200ms;
+   
+}
+
+.product .text-center img {
+    max-width: 100%;
+    max-height: 15rem;
+}
+
+.product .title {    
+    font-weight: bold;
+    text-decoration: none;    
+}
+.text-gray {
+    color: #4f71cf;  
+} 
+    
+.product:hover {
+    transform: scale(1.15);
+    z-index: 2;   
+}
+
+.show-by-hover {
+display: none;
+}
+
+.product:hover .show-by-hover{
+    display: block;
+}
+
+.product .text-center img {
+   max-width: 100%;
+   max-height: 15rem;
+}
+
+ 
+
+ .price{
+    font-size: 1.2rem;
+    font-weight: bold;
+    white-space: nowrap; 
+      }       
+
+.product .cart img{
+    width: 3.5rem;
+}
+
+ 
+.go-up {
+    position: fixed;
+    top:50%;
+    right: 0;
+    padding: 1.5rem 1rem;
+    margin: 1.2rem ;
+    background-color: white;
+    border: 1.5px solid #2a1515;
+    border-radius: 0.4rem;
+    display: inline-block;
+    font-size: 1.5rem;
+    z-index: 5;
+    transition: transform 2200ms;
+}
+
+.go-up:hover{
+   transform: scale(1.3);
+    
+}
+.go-up, .go-up:hover, .go-up:focus, .go-up:active,.go-up:visited {
+    color: rgb(20, 16, 16);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+  
+.no-decoration {
+    text-decoration: none;
+}
+  /* Stage 2: Creating styles for the element with class custom-bg */
+  .custom-bg {
+  background-color: rgb(57, 128, 254);
+  height: auto;
+  }
+  
+  /* Stage 3: Creating styles for the element with class bg-base */
+  .bg-base {
+  background-color: #dbe4e7;
+  }
+  
+  /* Stage 4: Creating styles for the element with class products and its child elements */
+  .products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 14rem);
+  }
+  
+  /* Stage 5: Creating styles for the element with class large */
+  /* .large {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  } */
+  
+  /* Stage 6: Creating styles for the img tag */
+  /* img {
+  width: 100%;
+  object-fit: cover;
+  object-position: bottom left;
+  } */
+  
+  /* Stage 7: Creating styles for the element with class logo */
+  .logo {
+  width: 20%;
+  }
+  
+  /* Stage 8: Creating styles for the element with class product and its child elements */
+  /* .product {
+  position: relative;
+  } */
+  
+  /* .product > div {
+  position: absolute;
+  bottom: 0;
+  color: rgb(255, 254, 254);
+  } */
+  
+  /* Stage 9: Creating styles for elements with class social-icon and its subclasses */
+  .social-icon {
+  background-image: url("../img/googl-fasebook.webp");
+  width: 3rem;
+  height: 3rem;
+  background-position: -14.6rem -0.4rem;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  }
+  
+  /* Stage 10: Creating styles for the element with class social-icon-googl and its pseudo-classes */
+  .social-icon-googl {
+  background-position: -14.6rem -0.4rem;
+  }
+  
+  .social-icon-googl:hover {
+  background-position: -14.6rem 3.2rem;
+  }
+  
+  /* Stage 11: Creating styles for the element with class social-icon-facebook and its pseudo-classes */
+  .social-icon-facebook {
+  background-position: -3.9rem -0.4rem;
+  }
+  
+  .social-icon-facebook:hover {
+  background-position: -3.9rem -3.95rem;
+}
+
+.btn-b {
+    width: 600px; 
+    height: 100px;
+    padding: 30px;
+
+    display: flex;
+            align-items: center;
+            justify-content: center; 
+           
+}
+
+
+html, body {
+    font-size: 100%;
+    background: rgb(4,15,153);
+    background: linear-gradient(90deg, rgba(4,15,153,1) 0%, rgba(153,0,255,1) 38%, rgba(166,11,171,1) 75%);
+}
+
+
+.product {
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    align-items: start;
+}
+
+
+
+.product {
+    box-shadow: -1px 1px 3px #c6c6c6;
+    text-shadow: -1px 1px 3px #c6c6c6;
+    cursor: pointer;
+    transition: transform 2200ms;
+
+}
+
+.product .text-center img {
+    max-width: 100%;
+    max-height: 15rem;
+}
+
+.product .title {
+    font-weight: bold;
+    text-decoration: none;
+}
+.text-gray {
+    color: #4f71cf;
+}
+
+.product:hover {
+    transform: scale(1.15);
+    z-index: 2;
+}
+
+.show-by-hover {
+    display: none;
+}
+
+.product:hover .show-by-hover{
+    display: block;
+}
+
+.product .text-center img {
+    max-width: 100%;
+    max-height: 15rem;
+}
+
+
+
+.price{
+    font-size: 1.2rem;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.product .cart img{
+    width: 3.5rem;
+}
+
+
+.go-up {
+    position: fixed;
+    top:50%;
+    right: 0;
+    padding: 1.5rem 1rem;
+    margin: 1.2rem ;
+    background-color: white;
+    border: 1.5px solid #2a1515;
+    border-radius: 0.4rem;
+    display: inline-block;
+    font-size: 1.5rem;
+    z-index: 5;
+    transition: transform 2200ms;
+}
+
+.go-up:hover{
+    transform: scale(1.3);
+
+}
+.go-up, .go-up:hover, .go-up:focus, .go-up:active,.go-up:visited {
+    color: rgb(20, 16, 16);
+    text-decoration: none;
+    cursor: pointer;
+}

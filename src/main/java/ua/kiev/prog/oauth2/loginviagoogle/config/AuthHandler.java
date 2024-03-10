@@ -53,6 +53,6 @@ public class AuthHandler implements AuthenticationSuccessHandler {
 
         generalService.addAccount(accountDTO, tasks);
 
-        httpServletResponse.sendRedirect("/");
+        httpServletResponse.sendRedirect("/index1.html");
     }
 }

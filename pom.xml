@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>ua.kiev.prog.oauth2</groupId>
-    <artifactId>login-via-google</artifactId>
+    <artifactId>aqua-logistic-ide</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>login-via-google</name>
     <description>Demo project for Spring Boot</description>
