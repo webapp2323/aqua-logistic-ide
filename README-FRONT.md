@@ -1,4 +1,4 @@
-    https://github.com/webapp2323/aqua-logistic
+https://github.com/webapp2323/aqua-logistic-ide
 
     Виконаний Backlog для сайту магазину продажу води:
 
