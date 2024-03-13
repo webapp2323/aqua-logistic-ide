@@ -37,7 +37,7 @@
                     
                     <a><h2 >Компанія</h2>
                     <h1 class="fw-bolder" >"Гармонія Аква Лоґістика"</h1></a>
-                   
+                    <h2 class="fw-bolder" >вітає Вас на сторінці реєстрації з найкращими побажаннями у задоволенні ваших потреб високоякісною та чистою питною водою</h2></a>
                 </div>
             </div>
             <!-- Stage 6: Call to Action Button -->
@@ -71,39 +71,37 @@
                
              <div id="about" class="  m-3  bg-white text-dark ">                     
                     <div class="text-dark ">
-                        <h2></h2>  
-                        
-                        <body>
+                        <h2></h2>
 
+                        <body>
+                        <div class="text-center">
                             <div class="container registration-container">
                                 <h2 class="text-center">Реєстрація</h2>
-                                <h4 class="text-center mb-5 text-dark"><strong></strong>Заходьте через форму реестрації або натиснувши кнопки <strong>GOOGLE/FACEBOOK</strong></h4>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="username">Ім'я користувача:</label>
-                                        <input type="text" class="form-control" id="username" name="username" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="email">Електронна пошта:</label>
-                                        <input type="email" class="form-control" id="email" name="email" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="password">Пароль:</label>
-                                        <input type="password" class="form-control" id="password" name="password" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="confirmPassword">Підтвердіть пароль:</label>
-                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary btn-block">Зареєструватися</button>
+                                <h4 class="text-center mb-5 text-dark"><strong></strong>Заходьте на сайт нашої компанії через форму реестрації або натиснувши кнопки <strong>GOOGLE/FACEBOOK</strong></h4>
+
+                                <form action="/j_spring_security_check" method="POST">
+                                    Login:<br/><input type="text" name="j_login"><br/>
+                                    Password:<br/><input type="password" name="j_password"><br/>
+                                    <input type="submit" />
+
+                                    <p><a href="/register">Register new user</a></p>
+
+                                    <c:if test="${param.error ne null}">
+                                        <p>Wrong login or password!</p>
+                                    </c:if>
+
+                                    <c:if test="${param.logout ne null}">
+                                        <p>Chao!</p>
+                                    </c:if>
                                 </form>
                             </div>
-                            
+                        </div>
+
                             <!-- Подключение Bootstrap JS (может потребоваться изменение путей) -->
                             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
                             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
                             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-                            
+
                             </body>
                             
                         </div>
