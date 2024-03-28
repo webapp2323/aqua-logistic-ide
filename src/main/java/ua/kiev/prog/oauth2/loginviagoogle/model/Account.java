@@ -13,6 +13,8 @@ public class Account {
     private Long id;
 
     private String email;
+
+    private String password;
     private String name;
     private String pictureUrl;
 
@@ -21,14 +23,15 @@ public class Account {
 
     public Account() {}
 
-    private Account(String email, String name, String pictureUrl) {
+    private Account(String email,String password, String name, String pictureUrl) {
         this.email = email;
         this.name = name;
+        this.password = password;
         this.pictureUrl = pictureUrl;
     }
 
-    public static Account of(String email, String name, String pictureUrl) {
-        return new Account(email, name, pictureUrl);
+    public static Account of(String email, String password, String name, String pictureUrl) {
+        return new Account(email, password, name, pictureUrl);
     }
 
     public void addTask(Task task) {
@@ -37,11 +40,12 @@ public class Account {
     }
 
     public AccountDTO toDTO() {
-        return AccountDTO.of(email, name, pictureUrl);
+        return AccountDTO.of(email, password, name, pictureUrl);
     }
 
     public static Account fromDTO(AccountDTO accountDTO) {
-        return Account.of(accountDTO.getEmail(), accountDTO.getName(), accountDTO.getPictureUrl());
+        return Account.of(accountDTO.getEmail(), accountDTO.getPassword(),
+            accountDTO.getName(), accountDTO.getPictureUrl());
     }
 
     public Long getId() {

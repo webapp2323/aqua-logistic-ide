@@ -1,6 +1,5 @@
 package ua.kiev.prog.oauth2.loginviagoogle.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -8,6 +7,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,10 +36,14 @@ public class AuthHandler implements AuthenticationSuccessHandler {
 
         Map<String, Object> attributes = user.getAttributes();
 
+        String email = (String) attributes.get("email");
+        String password = (String) attributes.get("password");
+
         AccountDTO accountDTO = AccountDTO.of(
-                (String) attributes.get("email"),
+            email,
+            password,
                 (String) attributes.get("name"),
-                (String) attributes.get("picture")
+                attributes.get("picture").toString()
         );
 
         List<TaskDTO> tasks = Arrays.asList(
@@ -51,7 +55,10 @@ public class AuthHandler implements AuthenticationSuccessHandler {
                 TaskDTO.of(new Date(), "Test task 6")
         );
 
-        generalService.addAccount(accountDTO, tasks);
+        Account account = generalService.getAccountByEmail(email);
+        if (account == null) {
+            generalService.addAccount(accountDTO, tasks);
+        }
 
         httpServletResponse.sendRedirect("/index1.html");
     }
