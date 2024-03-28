@@ -30,6 +30,11 @@ public class GeneralServiceImpl implements GeneralService {
 
     // DB -> E(20) -> R -> S <-> DTO -> C -> V(5) / JSON
 
+    @Override
+    public Account getAccountByEmail(String email) {
+        return accountRepository.findByEmail(email);
+    }
+
     @Transactional
     @Override
     public void addAccount(AccountDTO accountDTO, List<TaskDTO> tasks) {
