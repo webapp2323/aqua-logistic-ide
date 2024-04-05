@@ -80,11 +80,11 @@
                                 <h4 class="text-center mb-5 text-dark"><strong></strong>Заходьте на сайт нашої компанії через форму реестрації або натиснувши кнопки <strong>GOOGLE/FACEBOOK</strong></h4>
 
                                 <form action="/j_spring_security_check" method="POST">
-                                    Login:<br/><input type="text" name="j_login"><br/>
+                                    Email:<br/><input type="text" name="j_login"><br/>
                                     Password:<br/><input type="password" name="j_password"><br/>
                                     <input type="submit" />
 
-                                    <p><a href="/register">Register new user</a></p>
+                                    <p><a href="/registration.html">Register new user</a></p>
 
                                     <c:if test="${param.error ne null}">
                                         <p>Wrong login or password!</p>

@@ -11,7 +11,8 @@ import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 
 public interface GeneralService {
     Account getAccountByEmail(String email);
-    void addAccount(AccountDTO accountDTO, List<TaskDTO> tasks);
+    void addAccount(AccountDTO accountDTO);
+    void addAccountWithTasks(AccountDTO accountDTO, List<TaskDTO> tasks);
     void addTask(String email, TaskDTO taskDTO);
     List<TaskDTO> getTasks(String email, Pageable pageable);
     List<TaskToNotifyDTO> getTasksToNotify(Date now);
