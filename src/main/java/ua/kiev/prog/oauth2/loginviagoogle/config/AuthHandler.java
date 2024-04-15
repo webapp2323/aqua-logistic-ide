@@ -26,6 +26,14 @@ public class AuthHandler implements AuthenticationSuccessHandler {
     this.generalService = generalService;
   }
 
+  /**
+   * Is called when user logs in with Google or Facebook credentials.
+   *
+   * @param httpServletRequest
+   * @param httpServletResponse
+   * @param authentication
+   * @throws IOException
+   */
   @Override
   public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
       HttpServletResponse httpServletResponse,
@@ -44,14 +52,10 @@ public class AuthHandler implements AuthenticationSuccessHandler {
         (String) attributes.get("name"),
         getPictureUrl(attributes)
     );
-
-
-
     Account account = generalService.getAccountByEmail(email);
     if (account == null) {
       generalService.addAccount(accountDTO);
     }
-
     httpServletResponse.sendRedirect("/index1.html");
   }
 

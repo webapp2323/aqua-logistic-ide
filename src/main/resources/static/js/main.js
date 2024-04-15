@@ -35,7 +35,7 @@ function assignButtons() {
 
             $.ajax({
                 type: "POST",
-                url: "/add",
+                url: "/addTask",
                 contentType: "application/json",
                 data: JSON.stringify(task),
                 success: function () {

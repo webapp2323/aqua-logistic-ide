@@ -1,9 +1,9 @@
 package ua.kiev.prog.oauth2.loginviagoogle.controllers;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 
 @RestController
@@ -36,97 +37,77 @@ public class MainController {
   }
 
   @GetMapping("/")
-  public String index(Model model) {
-    User user = getCurrentUser();
+  public void index(HttpServletResponse response) throws IOException {
+    response.sendRedirect("/index.html");
+  }
 
-    String login = user.getUsername();
-//    CustomUser dbUser = userService.findByLogin(login);
+//  @PostMapping(value = "/update")
+//  public String update(@RequestParam(required = false) String email,
+//      @RequestParam(required = false) String phone) {
+//    User user = getCurrentUser();
 //
-//    model.addAttribute("login", login);
-//    model.addAttribute("roles", user.getAuthorities());
-//    model.addAttribute("admin", isAdmin(user));
-//    model.addAttribute("email", dbUser.getEmail());
-//    model.addAttribute("phone", dbUser.getPhone());
-//    model.addAttribute("address", dbUser.getAddress());
+//    String login = user.getUsername();
+////    userService.updateUser(login, email, phone);
+//
+//    return "redirect:/";
+//  }
 
-    return "index.html";
-  }
-
-  @PostMapping(value = "/update")
-  public String update(@RequestParam(required = false) String email,
-      @RequestParam(required = false) String phone) {
-    User user = getCurrentUser();
-
-    String login = user.getUsername();
-    //userService.updateUser(login, email, phone);
-
-    return "redirect:/";
-  }
-
-  @PostMapping(value = "/add")
+  @PostMapping(value = "/addTask")
   public ResponseEntity addTask(AbstractAuthenticationToken auth,
       @RequestBody TaskDTO task) {
-    if (auth instanceof OAuth2AuthenticationToken) {
-      OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) auth;
-      generalService.addTask(token.getPrincipal().getAttribute("email"), task);
-    } else if (auth instanceof UsernamePasswordAuthenticationToken) {
-      UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) auth;
-      generalService.addTask(((User) token.getPrincipal()).getUsername(), task);
-    }
+    String userEmail = getEmailFromAuthenticationToken(auth);
+    generalService.addTask(userEmail, task);
     return ResponseEntity.ok().build();
   }
 
+  private String getEmailFromAuthenticationToken(AbstractAuthenticationToken auth) {
+    if (auth instanceof OAuth2AuthenticationToken) {
+      OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) auth;
+      return token.getPrincipal().getAttribute("email");
+    } else if (auth instanceof UsernamePasswordAuthenticationToken) {
+      UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) auth;
+      return ((User) token.getPrincipal()).getUsername();
+    }
+    return null;
+  }
 
+  /**
+   * Is called when user registers via website.
+   *
+   * @param response
+   * @param login
+   * @param password
+   * @param email
+   * @throws IOException
+   */
   @PostMapping(value = "/newuser")
-  public String update(@RequestParam String login,
+  public void addNewUser(HttpServletResponse response,
+      @RequestParam String login,
       @RequestParam String password,
-      @RequestParam(required = false) String email,
-      @RequestParam(required = false) String phone,
-      @RequestParam(required = false) String address,
-      Model model) {
-    AccountDTO accountDTO = AccountDTO.of(
-        email,
-        passwordEncoder.encode(password),
-        login,
-        "pic"
-    );
-
-    generalService.addAccount(accountDTO);
-
-//    String passHash = passwordEncoder.encode(password);
-//
-//    if (!userService.addUser(login, passHash, UserRole.USER, email, phone, address)) {
-//      model.addAttribute("exists", true);
-//      model.addAttribute("login", login);
-//      return "register";
-//    }
-
-    return "redirect:/signUp.html";
+      @RequestParam(required = false) String email) throws IOException {
+    Account account = generalService.getAccountByEmail(email);
+    if (account == null) {
+      AccountDTO accountDTO = AccountDTO.of(email,
+          passwordEncoder.encode(password), login, "pic");
+      generalService.addAccount(accountDTO);
+    }
+    response.sendRedirect("/signUp.html");
   }
 
   @GetMapping("/tasks")
-  public List<TaskDTO> tasks(OAuth2AuthenticationToken auth,
-      @RequestParam(required = false, defaultValue = "0") Integer page) {
-    String email = auth.getPrincipal().getAttribute("email");
-    return generalService.getTasks(email,
-        PageRequest.of(
-            page,
-            1,
-            Sort.Direction.DESC,
-            "id"
-        )
-    );
+  public List<TaskDTO> getAllTasks(AbstractAuthenticationToken auth) {
+    String email = getEmailFromAuthenticationToken(auth);
+    return generalService.getTasks(email);
   }
 
-
-  @PostMapping(value = "/delete")
-  public String delete(@RequestParam(name = "toDelete[]", required = false) List<Long> ids,
-      Model model) {
-//    userService.deleteUsers(ids);
-//    model.addAttribute("users", userService.getAllUsers());
-//
-    return "admin";
-  }
+//  @PostMapping(value = "/delete")
+//  public String delete(@RequestParam(name = "toDelete[]", required = false) List<Long> ids,
+//      Model model) {
+////    userService.deleteUsers(ids);
+////    model.addAttribute("users", userService.getAllUsers());
+////
+//    return "admin";
+//  }
 
   @GetMapping("/login")
   public String loginPage() {

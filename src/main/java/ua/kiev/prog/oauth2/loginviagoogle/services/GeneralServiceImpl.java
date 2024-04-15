@@ -69,9 +69,9 @@ public class GeneralServiceImpl implements GeneralService {
 
   @Transactional(readOnly = true)
   @Override
-  public List<TaskDTO> getTasks(String email, Pageable pageable) {
+  public List<TaskDTO> getTasks(String email) {
     List<TaskDTO> result = new ArrayList<>();
-    List<Task> tasks = taskRepository.findByAccountEmail(email, pageable);
+    List<Task> tasks = taskRepository.findByAccountEmail(email);
 
     tasks.forEach((x) -> result.add(x.toDTO()));
     return result;
@@ -109,6 +109,6 @@ public class GeneralServiceImpl implements GeneralService {
   @Transactional
   @Override
   public void delete(List<Long> idList) {
-    idList.forEach((x) -> taskRepository.deleteById(x));
+    idList.forEach(taskRepository::deleteById);
   }
 }
