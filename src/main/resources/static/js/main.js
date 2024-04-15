@@ -38,23 +38,13 @@ function assignButtons() {
                 url: "/add",
                 contentType: "application/json",
                 data: JSON.stringify(task),
-                dataType: "json",
-                success: function (result, status, xhr) {
-                    if (result.description == "OK") {
-                        $("#messageSpan").text("Added successfully");
-                        setTimeout(function () {
-                            window.location = "/";
-                        }, 2000);
-                    } else {
-                        $("#messageSpan").text("Error occured!");
-                    }
+                success: function () {
+                    $("#messageSpan").text("Added successfully");
                 },
                 error: function (xhr, status, error) {
-                    var jsonError = jQuery.parseJSON( xhr.responseText );
-                    var desc = (jsonError != "") ? jsonError.description : "no details";
-
+                    $("#messageSpan").text("Error occurred!");
                     $("#messageSpan").text("Result: " + status + " " + error + " " +
-                        xhr.status + " " + xhr.statusText + ": " + desc);
+                        xhr.status + " ");
                 }
             });
         }
