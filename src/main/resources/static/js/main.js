@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     assignButtons();
     loadPages();
-    loadData(0);
+    loadData();
 });
 
 function calculatePrice() {
@@ -40,12 +40,13 @@ function assignButtons() {
                 data: JSON.stringify(task),
                 success: function () {
                     $("#messageSpan").text("Added successfully");
+                    loadData();
                 },
                 error: function (xhr, status, error) {
                     $("#messageSpan").text("Error occurred!");
                     $("#messageSpan").text("Result: " + status + " " + error + " " +
                         xhr.status + " ");
-                }
+                },
             });
         }
     });
@@ -81,14 +82,14 @@ function loadPages() {
     });
 
     $("#pages").on("click", ".page-link", function(event) {
-        loadData(event.target.id);
+        loadData();
     });
 }
 
-function loadData(page) {
+function loadData() {
     $("#data > tbody").empty();
 
-    $.getJSON('/tasks?page=' + page, function(data) {
+    $.getJSON('/tasks?', function(data) {
         var i;
 
         for (i = 0; i < data.length; i++) {
@@ -100,7 +101,10 @@ function loadData(page) {
                     )
                 )
                 .append($('<td>').append(data[i].date.replace('T', '  ')))
-                .append($('<td>').append(data[i].text))
+                .append($('<td>').append(data[i].address))
+                .append($('<td>').append(data[i].phone))
+                .append($('<td>').append(data[i].quantity))
+                .append($('<td>').append(data[i].price))
             );
         }
     });
