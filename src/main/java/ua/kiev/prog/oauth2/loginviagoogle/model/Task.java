@@ -1,73 +1,111 @@
 package ua.kiev.prog.oauth2.loginviagoogle.model;
 
-import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
 
 @Entity
 public class Task {
-    @Id
-    @GeneratedValue
-    private Long id;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+  @Id
+  @GeneratedValue
+  private Long id;
 
-    private String text;
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date date;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+  private String address;
+  private String phone;
+  private int quantity;
+  private long price;
 
-    public Task() {}
 
-    private Task(Date date, String text) {
-        this.date = date;
-        this.text = text;
-    }
+  @ManyToOne
+  @JoinColumn(name = "account_id")
+  private Account account;
 
-    public static Task of(Date date, String text) {
-        return new Task(date, text);
-    }
+  public Task() {}
 
-    public TaskDTO toDTO() {
-        return TaskDTO.of(id, date, text);
-    }
+  public Task(Date date, String address, String phone, int quantity, long price) {
+    this.date = date;
+    this.address = address;
+    this.phone = phone;
+    this.quantity = quantity;
+    this.price = price;
+  }
 
-    public static Task fromDTO(TaskDTO taskDTO) {
-        return Task.of(taskDTO.getDate(), taskDTO.getText());
-    }
+  public static Task of(Date date, String address, String phone, int quantity, long price) {
+    return new Task(date, address, phone, quantity, price);
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public static Task fromDTO(TaskDTO taskDTO) {
+    return Task.of(taskDTO.getDate(), taskDTO.getAddress(), taskDTO.getPhone(), taskDTO.getQuantity(), taskDTO.getPrice());
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Date getDate() {
-        return date;
-    }
+  public TaskDTO toDTO() {
+    return TaskDTO.of(id, date, address, phone, quantity, price);
+  }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public String getText() {
-        return text;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public Date getDate() {
+    return date;
+  }
 
-    public Account getAccount() {
-        return account;
-    }
+  public void setDate(Date date) {
+    this.date = date;
+  }
 
-    public void setAccount(Account account) {
-        this.account = account;
-    }
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
+
+  public long getPrice() {
+    return price;
+  }
+
+  public void setPrice(long price) {
+    this.price = price;
+  }
+
+  public Account getAccount() {
+    return account;
+  }
+
+  public void setAccount(Account account) {
+    this.account = account;
+  }
 }

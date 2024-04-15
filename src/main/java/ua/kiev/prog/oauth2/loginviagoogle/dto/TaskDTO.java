@@ -3,58 +3,73 @@ package ua.kiev.prog.oauth2.loginviagoogle.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 
 public class TaskDTO {
-    private Long id;
 
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm", timezone = "UTC")
-    private Date date;
+  private Long id;
 
-    private String text;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
+  private Date date;
 
-    @JsonCreator
-    public TaskDTO(@JsonProperty(required = true) Date date,
-                   @JsonProperty(required = true) String text) {
-        this.date = date;
-        this.text = text;
-    }
+  private String address;
 
-    private TaskDTO(Long id, Date date, String text) {
-        this.id = id;
-        this.date = date;
-        this.text = text;
-    }
+  private String phone;
 
-    public static TaskDTO of(Date date, String text) {
-        return new TaskDTO(null, date, text);
-    }
-    public static TaskDTO of(Long id, Date date, String text) {
-        return new TaskDTO(id, date, text);
-    }
+  private int quantity;
 
-    public Long getId() {
-        return id;
-    }
+  private long price;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Date getDate() {
-        return date;
-    }
+  @JsonCreator
+  public TaskDTO(@JsonProperty(required = true) Date date,
+      @JsonProperty(required = true) String address,
+      @JsonProperty(required = true) int quantity,
+      @JsonProperty(required = true) String phone,
+      @JsonProperty(required = false) long price) {
+    this.date = date;
+    this.address = address;
+    this.quantity = quantity;
+    this.price = price;
+    this.phone = phone;
+  }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+  public TaskDTO(Long id, Date date, String address, String phone, int quantity, long price) {
+    this.id = id;
+    this.date = date;
+    this.address = address;
+    this.quantity = quantity;
+    this.price = price;
+    this.phone = phone;
+  }
 
-    public String getText() {
-        return text;
-    }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+  public static TaskDTO of(Long id, Date date, String address, String phone, int quantity,
+      long price) {
+    return new TaskDTO(id, date, address, phone, quantity, price);
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public Date getDate() {
+    return date;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public int getQuantity() {
+    return quantity;
+  }
+
+  public long getPrice() {
+    return price;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
 }

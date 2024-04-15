@@ -45,18 +45,11 @@ public class AuthHandler implements AuthenticationSuccessHandler {
         getPictureUrl(attributes)
     );
 
-    List<TaskDTO> tasks = Arrays.asList(
-        TaskDTO.of(new Date(), "Test task 1"),
-        TaskDTO.of(new Date(), "Test task 2"),
-        TaskDTO.of(new Date(), "Test task 3"),
-        TaskDTO.of(new Date(), "Test task 4"),
-        TaskDTO.of(new Date(), "Test task 5"),
-        TaskDTO.of(new Date(), "Test task 6")
-    );
+
 
     Account account = generalService.getAccountByEmail(email);
     if (account == null) {
-      generalService.addAccountWithTasks(accountDTO, tasks);
+      generalService.addAccount(accountDTO);
     }
 
     httpServletResponse.sendRedirect("/index1.html");

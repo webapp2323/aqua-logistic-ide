@@ -15,7 +15,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAccountEmail(String email, Pageable pageable);
     Long countByAccountEmail(String email);
 
-    @Query("SELECT NEW ua.kiev.prog.oauth2.loginviagoogle.dto.TaskToNotifyDTO(a.email, t.date, t.text)" +
+    @Query("SELECT NEW ua.kiev.prog.oauth2.loginviagoogle.dto.TaskToNotifyDTO(a.email, t.date, t.address)" +
             "FROM Account a, Task t WHERE t.date >= :from AND t.date < :to")
     List<TaskToNotifyDTO> findTasksToNotify(@Param("from") Date from,
                                             @Param("to") Date to);

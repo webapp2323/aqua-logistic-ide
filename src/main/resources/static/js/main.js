@@ -9,22 +9,28 @@ $(document).ready(function(){
     loadData(0);
 });
 
+function calculatePrice() {
+    $("#price").val($("#quantity").val() * 10);
+}
 function assignButtons() {
     $("#submitButton").click(function (e) {
-        if ($("#taskText").val() == "")
-            $("#textSpan").text("Enter text");
+        if ($("#address").val() == "")
+            $("#addressSpan").text("Enter text");
         else
-            $("#textSpan").text("");
+            $("#addressSpan").text("");
 
-        if ($("#taskDate").val() == "")
+        if ($("#deliveryDate").val() == "")
             $("#dateSpan").text("Enter date");
         else
             $("#dateSpan").text("");
 
-        if (($("#taskText").val() != "") && ($("#taskDate").val() != "")) {
+        if (($("#deliveryDate").val() != "") && ($("#address").val() != "")) {
             const task = {
-                date: $("#taskDate").val(),
-                text: $("#taskText").val()
+                date: $("#deliveryDate").val(),
+                address: $("#address").val(),
+                quantity: $("#quantity").val(),
+                price: $("#price").val(),
+                phone: $("#phone").val()
             };
 
             $.ajax({
@@ -79,7 +85,7 @@ function loadPages() {
             $('#pages').append(
                 $('<li>').attr('class', 'page-item').append(
                     $('<a>').attr('class', 'page-link').attr('id', i - 1)
-                        .append('Page ' + i))
+                    .append('Page ' + i))
             );
         }
     });
@@ -98,13 +104,13 @@ function loadData(page) {
         for (i = 0; i < data.length; i++) {
             $('#data > tbody:last-child').append(
                 $('<tr>')
-                    .append(
-                        $('<td>').append(
-                            $('<input>').attr('type', 'checkbox').attr('value', data[i].id)
-                        )
+                .append(
+                    $('<td>').append(
+                        $('<input>').attr('type', 'checkbox').attr('value', data[i].id)
                     )
-                    .append($('<td>').append(data[i].date.replace('T', '  ')))
-                    .append($('<td>').append(data[i].text))
+                )
+                .append($('<td>').append(data[i].date.replace('T', '  ')))
+                .append($('<td>').append(data[i].text))
             );
         }
     });

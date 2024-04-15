@@ -2,20 +2,28 @@ package ua.kiev.prog.oauth2.loginviagoogle.controllers;
 
 import java.util.Collection;
 import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 
-@Controller
+@RestController
 public class MainController {
 
   private final GeneralService generalService;
@@ -55,6 +63,20 @@ public class MainController {
     return "redirect:/";
   }
 
+  @PostMapping(value = "/add")
+  public ResponseEntity addTask(AbstractAuthenticationToken auth,
+      @RequestBody TaskDTO task) {
+    if (auth instanceof OAuth2AuthenticationToken) {
+      OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) auth;
+      generalService.addTask(token.getPrincipal().getAttribute("email"), task);
+    } else if (auth instanceof UsernamePasswordAuthenticationToken) {
+      UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) auth;
+      generalService.addTask(((User) token.getPrincipal()).getUsername(), task);
+    }
+    return ResponseEntity.ok().build();
+  }
+
+
   @PostMapping(value = "/newuser")
   public String update(@RequestParam String login,
       @RequestParam String password,
@@ -81,6 +103,21 @@ public class MainController {
 
     return "redirect:/signUp.html";
   }
+
+  @GetMapping("/tasks")
+  public List<TaskDTO> tasks(OAuth2AuthenticationToken auth,
+      @RequestParam(required = false, defaultValue = "0") Integer page) {
+    String email = auth.getPrincipal().getAttribute("email");
+    return generalService.getTasks(email,
+        PageRequest.of(
+            page,
+            1,
+            Sort.Direction.DESC,
+            "id"
+        )
+    );
+  }
+
 
   @PostMapping(value = "/delete")
   public String delete(@RequestParam(name = "toDelete[]", required = false) List<Long> ids,
