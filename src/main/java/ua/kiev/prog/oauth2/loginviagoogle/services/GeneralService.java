@@ -15,6 +15,7 @@ public interface GeneralService {
     void addAccountWithTasks(AccountDTO accountDTO, List<TaskDTO> tasks);
     void addTask(String email, TaskDTO taskDTO);
     List<TaskDTO> getTasks(String email);
+    List<TaskDTO> getAllTasks();
     List<TaskToNotifyDTO> getTasksToNotify(Date now);
     Long count(String email);
     void delete(List<Long> idList);

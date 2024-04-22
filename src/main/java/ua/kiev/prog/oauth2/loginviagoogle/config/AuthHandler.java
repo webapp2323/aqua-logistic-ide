@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.UserRole;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 
@@ -46,7 +47,7 @@ public class AuthHandler implements AuthenticationSuccessHandler {
     String email = (String) attributes.get("email");
     String password = (String) attributes.get("password");
 
-    AccountDTO accountDTO = AccountDTO.of(
+    AccountDTO accountDTO = AccountDTO.of(UserRole.USER,
         email,
         password,
         (String) attributes.get("name"),

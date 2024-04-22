@@ -29,8 +29,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
       throw new UsernameNotFoundException(username + " not found");
     }
 
-    List<GrantedAuthority> roles = Arrays.asList(
-        new SimpleGrantedAuthority("role_ADMIN")
+    List<GrantedAuthority> roles = List.of(
+        new SimpleGrantedAuthority(account.getRole().toString())
     );
     AccountDTO customUser = account.toDTO();
     return new User(customUser.getEmail(), customUser.getPassword(), roles);

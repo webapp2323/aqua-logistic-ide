@@ -2,6 +2,8 @@ package ua.kiev.prog.oauth2.loginviagoogle.model;
 
 import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -9,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskStatus;
 
 @Entity
 public class Task {
@@ -25,6 +28,9 @@ public class Task {
   private int quantity;
   private long price;
 
+  //TODO: add status to constructor methods below
+//  @Enumerated(EnumType.STRING)
+//  private TaskStatus status;
 
   @ManyToOne
   @JoinColumn(name = "account_id")

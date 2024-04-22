@@ -22,7 +22,7 @@
                 <a class="nav-link" href="#" data-toggle="modal" data-target="#addModal">Add</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" id="deleteButton">Delete</a>
+                <a class="nav-link" href="#" id="deleteButton" onclick="deleteTasks()">Delete</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
@@ -66,22 +66,22 @@
                     <tbody>
                     <tr>
                         <td>
-                            Date: <input type="datetime-local" id="deliveryDate"  />
+                            Delivery Date: <input type="datetime-local" id="deliveryDate"  />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            Address: <input type="area" id="address" />
+                            Address: <input type="area" id="address" placeholder="address" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            Phone number: <input type="text" id="phone"  />
+                            Phone number: <input type="text" id="phone" placeholder="phone"  />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            Quantity: <input type="text" id="quantity" onchange="calculatePrice()"/>
+                            Quantity: <input type="text" id="quantity" onchange="calculatePrice()" placeholder="quantity"/>
                         </td>
                     </tr>
                     <tr>
@@ -99,7 +99,7 @@
                         <td><span id="quantitySpan"></span></td>
                     </tr>
                     <tr>
-                        <td><span id="priceSpan"></span></td>
+                        <td><span id="phoneSpan"></span></td>
                     </tr>
                     <tr>
                         <td>

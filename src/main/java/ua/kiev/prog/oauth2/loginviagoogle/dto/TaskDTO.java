@@ -4,21 +4,27 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 public class TaskDTO {
 
   private Long id;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm", timezone = "UTC")
-  private Date date;
+  private final Date date;
 
-  private String address;
+  private final String address;
 
-  private String phone;
+  private final String phone;
 
-  private int quantity;
+  private final int quantity;
 
-  private long price;
+  private final long price;
+
+//  TODO: add status to constructor methods below
+//  @Enumerated(EnumType.STRING)
+//  private TaskStatus status;
 
 
   @JsonCreator
@@ -26,7 +32,7 @@ public class TaskDTO {
       @JsonProperty(required = true) String address,
       @JsonProperty(required = true) int quantity,
       @JsonProperty(required = true) String phone,
-      @JsonProperty(required = false) long price) {
+      long price) {
     this.date = date;
     this.address = address;
     this.quantity = quantity;

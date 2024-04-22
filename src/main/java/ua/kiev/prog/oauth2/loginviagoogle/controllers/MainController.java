@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.UserRole;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 
@@ -61,11 +62,9 @@ public class MainController {
   }
 
   private String getEmailFromAuthenticationToken(AbstractAuthenticationToken auth) {
-    if (auth instanceof OAuth2AuthenticationToken) {
-      OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) auth;
+    if (auth instanceof OAuth2AuthenticationToken token) {
       return token.getPrincipal().getAttribute("email");
-    } else if (auth instanceof UsernamePasswordAuthenticationToken) {
-      UsernamePasswordAuthenticationToken token = (UsernamePasswordAuthenticationToken) auth;
+    } else if (auth instanceof UsernamePasswordAuthenticationToken token) {
       return ((User) token.getPrincipal()).getUsername();
     }
     return null;
@@ -87,7 +86,7 @@ public class MainController {
       @RequestParam(required = false) String email) throws IOException {
     Account account = generalService.getAccountByEmail(email);
     if (account == null) {
-      AccountDTO accountDTO = AccountDTO.of(email,
+      AccountDTO accountDTO = AccountDTO.of(UserRole.USER, email,
           passwordEncoder.encode(password), login, "pic");
       generalService.addAccount(accountDTO);
     }
@@ -97,7 +96,27 @@ public class MainController {
   @GetMapping("/tasks")
   public List<TaskDTO> getAllTasks(AbstractAuthenticationToken auth) {
     String email = getEmailFromAuthenticationToken(auth);
+    Collection<GrantedAuthority> roles = getRoleFromAuthenticationToken(auth);
+    boolean isAdmin = isAdmin(roles);
+    if (isAdmin) {
+      return generalService.getAllTasks();
+    }
     return generalService.getTasks(email);
+  }
+
+  @PostMapping("/deleteTasks")
+  public void deleteTasks() {
+//TODO:deleteTasks
+  }
+
+  private Collection<GrantedAuthority> getRoleFromAuthenticationToken(
+      AbstractAuthenticationToken auth) {
+    if (auth instanceof OAuth2AuthenticationToken token) {
+      return (Collection<GrantedAuthority>) token.getPrincipal().getAuthorities();
+    } else if (auth instanceof UsernamePasswordAuthenticationToken token) {
+      return ((User) token.getPrincipal()).getAuthorities();
+    }
+    return null;
   }
 
 //  @PostMapping(value = "/delete")
@@ -142,15 +161,14 @@ public class MainController {
         .getPrincipal();
   }
 
-  private boolean isAdmin(User user) {
-    Collection<GrantedAuthority> roles = user.getAuthorities();
-
-    for (GrantedAuthority auth : roles) {
-      if ("ROLE_ADMIN".equals(auth.getAuthority())) {
-        return true;
+  private boolean isAdmin(Collection<GrantedAuthority> roles) {
+    if (roles != null) {
+      for (GrantedAuthority auth : roles) {
+        if ("ROLE_ADMIN".equalsIgnoreCase(auth.getAuthority())) {
+          return true;
+        }
       }
     }
-
     return false;
   }
 }

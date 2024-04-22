@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAccountEmail(String email);
+
+    List<Task> findAll();
     Long countByAccountEmail(String email);
 
     @Query("SELECT NEW ua.kiev.prog.oauth2.loginviagoogle.dto.TaskToNotifyDTO(a.email, t.date, t.address)" +

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
@@ -77,12 +76,13 @@ public class GeneralServiceImpl implements GeneralService {
     return result;
   }
 
-    /*
-
-    19:57:31.001
-    [19:57:00; 19:58:00)
-
-     */
+  @Override
+  public List<TaskDTO> getAllTasks() {
+    List<TaskDTO> result = new ArrayList<>();
+    List<Task> tasks = taskRepository.findAll();
+    tasks.forEach((x) -> result.add(x.toDTO()));
+    return result;
+  }
 
   @Transactional(readOnly = true)
   @Override
