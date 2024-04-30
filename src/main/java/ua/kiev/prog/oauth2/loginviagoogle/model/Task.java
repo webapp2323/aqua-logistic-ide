@@ -56,7 +56,7 @@ public class Task {
 
 
   public TaskDTO toDTO() {
-    return TaskDTO.of(id, date, address, phone, quantity, price);
+    return TaskDTO.of(id, date, address, phone, quantity, price, account.getEmail());
   }
 
   public Long getId() {
