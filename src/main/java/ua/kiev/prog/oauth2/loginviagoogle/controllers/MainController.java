@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.PageCountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskStatus;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.UserRole;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
@@ -28,8 +30,8 @@ import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 @RestController
 public class MainController {
 
+  private static final int PAGE_SIZE = 5;
   private final GeneralService generalService;
-
   private final PasswordEncoder passwordEncoder;
 
   public MainController(GeneralService generalService, PasswordEncoder passwordEncoder) {
@@ -93,6 +95,12 @@ public class MainController {
     response.sendRedirect("/signUp.html");
   }
 
+  @GetMapping("/account")
+  public Account getPicture(AbstractAuthenticationToken auth) {
+    String email = getEmailFromAuthenticationToken(auth);
+    return generalService.getAccountByEmail(email);
+  }
+
   @GetMapping("/tasks")
   public List<TaskDTO> getAllTasks(AbstractAuthenticationToken auth) {
     String email = getEmailFromAuthenticationToken(auth);
@@ -101,7 +109,7 @@ public class MainController {
     if (isAdmin) {
       return generalService.getAllTasks();
     }
-    return generalService.getTasks(email);
+    return generalService.getTasksByStatus(email, TaskStatus.NEW);
   }
 
   @PostMapping("/deleteTasks")
@@ -136,6 +144,12 @@ public class MainController {
   @GetMapping("/register")
   public String register() {
     return "register";
+  }
+
+  @GetMapping("/count")
+  public PageCountDTO count(OAuth2AuthenticationToken auth) {
+    String email = getEmailFromAuthenticationToken(auth);
+    return PageCountDTO.of(generalService.count(email), PAGE_SIZE);
   }
 
   @GetMapping("/admin")

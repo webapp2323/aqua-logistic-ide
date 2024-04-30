@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskStatus;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskToNotifyDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Task;
@@ -77,6 +78,15 @@ public class GeneralServiceImpl implements GeneralService {
   }
 
   @Override
+  public List<TaskDTO> getTasksByStatus(String email, TaskStatus status) {
+    List<TaskDTO> result = new ArrayList<>();
+    List<Task> tasks = taskRepository.findByAccountEmailAndStatus(email, status);
+
+    tasks.forEach((x) -> result.add(x.toDTO()));
+    return result;
+  }
+
+  @Override
   public List<TaskDTO> getAllTasks() {
     List<TaskDTO> result = new ArrayList<>();
     List<Task> tasks = taskRepository.findAll();
@@ -109,6 +119,10 @@ public class GeneralServiceImpl implements GeneralService {
   @Transactional
   @Override
   public void delete(List<Long> idList) {
-    idList.forEach(taskRepository::deleteById);
+    List<Task> tasks = taskRepository.findAllById(idList);
+    for (Task task : tasks) {
+      task.setStatus(TaskStatus.DELETE);
+    }
+    taskRepository.saveAll(tasks);
   }
 }

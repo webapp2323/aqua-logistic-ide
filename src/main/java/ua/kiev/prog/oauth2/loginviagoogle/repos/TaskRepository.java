@@ -3,6 +3,7 @@ package ua.kiev.prog.oauth2.loginviagoogle.repos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskStatus;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskToNotifyDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Task;
 
@@ -13,6 +14,8 @@ import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAccountEmail(String email);
+
+    List<Task> findByAccountEmailAndStatus(String email, TaskStatus status);
 
     List<Task> findAll();
     Long countByAccountEmail(String email);

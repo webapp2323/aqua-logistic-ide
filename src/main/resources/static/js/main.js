@@ -136,6 +136,7 @@ function loadData() {
           .append($('<td>').append(data[i].quantity))
           .append($('<td>').append(data[i].price))
           .append($('<td>').append(data[i].taskOwner))
+          .append($('<td>').append(data[i].status))
       );
     }
   });

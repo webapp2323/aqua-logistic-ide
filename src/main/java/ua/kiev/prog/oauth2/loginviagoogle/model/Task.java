@@ -28,9 +28,8 @@ public class Task {
   private int quantity;
   private long price;
 
-  //TODO: add status to constructor methods below
-//  @Enumerated(EnumType.STRING)
-//  private TaskStatus status;
+  @Enumerated(EnumType.STRING)
+  private TaskStatus status;
 
   @ManyToOne
   @JoinColumn(name = "account_id")
@@ -56,7 +55,7 @@ public class Task {
 
 
   public TaskDTO toDTO() {
-    return TaskDTO.of(id, date, address, phone, quantity, price, account.getEmail());
+    return TaskDTO.of(id, date, address, phone, quantity, price, account.getEmail(), status);
   }
 
   public Long getId() {
@@ -113,5 +112,9 @@ public class Task {
 
   public void setAccount(Account account) {
     this.account = account;
+  }
+
+  public void setStatus(TaskStatus status) {
+    this.status = status;
   }
 }

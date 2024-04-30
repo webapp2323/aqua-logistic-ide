@@ -3,6 +3,7 @@ package ua.kiev.prog.oauth2.loginviagoogle.services;
 import org.springframework.data.domain.Pageable;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
+import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskStatus;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskToNotifyDTO;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ public interface GeneralService {
     void addAccountWithTasks(AccountDTO accountDTO, List<TaskDTO> tasks);
     void addTask(String email, TaskDTO taskDTO);
     List<TaskDTO> getTasks(String email);
+    List<TaskDTO> getTasksByStatus(String email, TaskStatus status);
     List<TaskDTO> getAllTasks();
     List<TaskToNotifyDTO> getTasksToNotify(Date now);
     Long count(String email);

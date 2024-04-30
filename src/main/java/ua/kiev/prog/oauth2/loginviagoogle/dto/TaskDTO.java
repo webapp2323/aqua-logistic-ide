@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Date;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import ua.kiev.prog.oauth2.loginviagoogle.model.Task;
 
 public class TaskDTO {
 
@@ -22,9 +25,8 @@ public class TaskDTO {
 
   private final String taskOwner;
 
-//  TODO: add status to constructor methods below
-//  @Enumerated(EnumType.STRING)
-//  private TaskStatus status;
+  @Enumerated(EnumType.STRING)
+  private TaskStatus status;
 
 
   @JsonCreator
@@ -43,7 +45,7 @@ public class TaskDTO {
   }
 
   public TaskDTO(Long id, Date date, String address, String phone, int quantity, long price,
-      String taskOwner) {
+      String taskOwner, TaskStatus status) {
     this.id = id;
     this.date = date;
     this.address = address;
@@ -51,12 +53,13 @@ public class TaskDTO {
     this.price = price;
     this.phone = phone;
     this.taskOwner = taskOwner;
+    this.status = status;
   }
 
 
   public static TaskDTO of(Long id, Date date, String address, String phone, int quantity,
-      long price, String taskOwner) {
-    return new TaskDTO(id, date, address, phone, quantity, price, taskOwner);
+      long price, String taskOwner, TaskStatus status) {
+    return new TaskDTO(id, date, address, phone, quantity, price, taskOwner, status);
   }
 
   public Long getId() {
@@ -85,5 +88,9 @@ public class TaskDTO {
 
   public String getTaskOwner() {
     return taskOwner;
+  }
+
+  public TaskStatus getStatus() {
+    return status;
   }
 }
