@@ -105,8 +105,8 @@ public class MainController {
   }
 
   @PostMapping("/deleteTasks")
-  public void deleteTasks() {
-//TODO:deleteTasks
+  public void deleteTasks(@RequestParam(name = "toDelete[]") List<Long> ids) {
+    generalService.delete(ids);
   }
 
   private Collection<GrantedAuthority> getRoleFromAuthenticationToken(

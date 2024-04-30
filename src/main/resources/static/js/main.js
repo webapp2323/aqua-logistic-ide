@@ -25,11 +25,6 @@ function calculatePrice() {
   price = price - Math.round(discount);
   $("#price").val(price);
 }
-function deleteTasks() {
-  $.getJSON('/deleteTasks?', function (data) {
-//TODO:deleteTasks
-  });
-}
 
 function assignButtons() {
   $("#submitButton").click(function (e) {
@@ -92,7 +87,7 @@ function assignButtons() {
       idList['toDelete'].push($(this).val());
     });
 
-    $.post("/delete", idList, function (data, status) {
+    $.post("/deleteTasks", idList, function (data, status) {
       window.location = "/";
     });
   });
