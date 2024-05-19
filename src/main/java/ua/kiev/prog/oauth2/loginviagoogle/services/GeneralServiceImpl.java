@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
@@ -78,18 +79,18 @@ public class GeneralServiceImpl implements GeneralService {
   }
 
   @Override
-  public List<TaskDTO> getTasksByStatus(String email, TaskStatus status) {
+  public List<TaskDTO> getTasksByStatus(String email, TaskStatus status,  Pageable pageable) {
     List<TaskDTO> result = new ArrayList<>();
-    List<Task> tasks = taskRepository.findByAccountEmailAndStatus(email, status);
+    List<Task> tasks = taskRepository.findByAccountEmailAndStatus(email, status, pageable);
 
     tasks.forEach((x) -> result.add(x.toDTO()));
     return result;
   }
 
   @Override
-  public List<TaskDTO> getAllTasks() {
+  public List<TaskDTO> getAllTasks(Pageable pageable) {
     List<TaskDTO> result = new ArrayList<>();
-    List<Task> tasks = taskRepository.findAll();
+    List<Task> tasks = taskRepository.findAll(pageable).toList();
     tasks.forEach((x) -> result.add(x.toDTO()));
     return result;
   }
@@ -114,6 +115,12 @@ public class GeneralServiceImpl implements GeneralService {
   @Override
   public Long count(String email) {
     return taskRepository.countByAccountEmail(email);
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public Long countAllTasks() {
+    return taskRepository.countAllTasks();
   }
 
   @Transactional

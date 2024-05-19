@@ -42,6 +42,7 @@ public class TaskDTO {
     this.price = price;
     this.phone = phone;
     this.taskOwner = taskOwner;
+    this.status = TaskStatus.NEW;
   }
 
   public TaskDTO(Long id, Date date, String address, String phone, int quantity, long price,

@@ -37,20 +37,22 @@ public class Task {
 
   public Task() {}
 
-  public Task(Date date, String address, String phone, int quantity, long price) {
+  public Task(Date date, String address, String phone, int quantity, long price, TaskStatus status) {
     this.date = date;
     this.address = address;
     this.phone = phone;
     this.quantity = quantity;
     this.price = price;
+    this.status = status;
   }
 
-  public static Task of(Date date, String address, String phone, int quantity, long price) {
-    return new Task(date, address, phone, quantity, price);
+  public static Task of(Date date, String address, String phone, int quantity, long price, TaskStatus status) {
+    return new Task(date, address, phone, quantity, price, status);
   }
 
   public static Task fromDTO(TaskDTO taskDTO) {
-    return Task.of(taskDTO.getDate(), taskDTO.getAddress(), taskDTO.getPhone(), taskDTO.getQuantity(), taskDTO.getPrice());
+    return Task.of(taskDTO.getDate(), taskDTO.getAddress(), taskDTO.getPhone(),
+        taskDTO.getQuantity(), taskDTO.getPrice(), taskDTO.getStatus());
   }
 
 

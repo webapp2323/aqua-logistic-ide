@@ -16,9 +16,10 @@ public interface GeneralService {
     void addAccountWithTasks(AccountDTO accountDTO, List<TaskDTO> tasks);
     void addTask(String email, TaskDTO taskDTO);
     List<TaskDTO> getTasks(String email);
-    List<TaskDTO> getTasksByStatus(String email, TaskStatus status);
-    List<TaskDTO> getAllTasks();
+    List<TaskDTO> getTasksByStatus(String email, TaskStatus status, Pageable pageable);
+    List<TaskDTO> getAllTasks(Pageable pageable);
     List<TaskToNotifyDTO> getTasksToNotify(Date now);
     Long count(String email);
+    Long countAllTasks();
     void delete(List<Long> idList);
 }

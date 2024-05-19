@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -102,14 +104,23 @@ public class MainController {
   }
 
   @GetMapping("/tasks")
-  public List<TaskDTO> getAllTasks(AbstractAuthenticationToken auth) {
+  public List<TaskDTO> getAllTasks(AbstractAuthenticationToken auth,
+      @RequestParam(required = false, defaultValue = "0") Integer page) {
     String email = getEmailFromAuthenticationToken(auth);
     Collection<GrantedAuthority> roles = getRoleFromAuthenticationToken(auth);
     boolean isAdmin = isAdmin(roles);
     if (isAdmin) {
-      return generalService.getAllTasks();
+      return generalService.getAllTasks(PageRequest.of(
+          page,
+          PAGE_SIZE,
+          Sort.Direction.DESC,
+          "id"));
     }
-    return generalService.getTasksByStatus(email, TaskStatus.NEW);
+    return generalService.getTasksByStatus(email, TaskStatus.NEW,  PageRequest.of(
+        page,
+        PAGE_SIZE,
+        Sort.Direction.DESC,
+        "id"));
   }
 
   @PostMapping("/deleteTasks")
@@ -147,8 +158,13 @@ public class MainController {
   }
 
   @GetMapping("/count")
-  public PageCountDTO count(OAuth2AuthenticationToken auth) {
+  public PageCountDTO count(AbstractAuthenticationToken auth) {
     String email = getEmailFromAuthenticationToken(auth);
+    Collection<GrantedAuthority> roles = getRoleFromAuthenticationToken(auth);
+    boolean isAdmin = isAdmin(roles);
+    if (isAdmin) {
+     return PageCountDTO.of(generalService.countAllTasks(), PAGE_SIZE);
+    }
     return PageCountDTO.of(generalService.count(email), PAGE_SIZE);
   }
 
@@ -186,4 +202,3 @@ public class MainController {
     return false;
   }
 }
-

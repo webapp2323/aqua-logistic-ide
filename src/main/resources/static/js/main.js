@@ -6,7 +6,7 @@ $(document).ready(function () {
 
   assignButtons();
   loadPages();
-  loadData();
+  loadData(0);
 });
 
 function calculatePrice() {
@@ -96,7 +96,7 @@ function assignButtons() {
 function loadPages() {
   $("#pages").empty();
 
-  $.getJSON('/count', function (data) {
+  $.getJSON('/count', function(data) {
     var pageCount = (data.count / data.pageSize) +
         (data.count % data.pageSize > 0 ? 1 : 0);
     var i;
@@ -110,15 +110,15 @@ function loadPages() {
     }
   });
 
-  $("#pages").on("click", ".page-link", function (event) {
-    loadData();
+  $("#pages").on("click", ".page-link", function(event) {
+    loadData(event.target.id);
   });
 }
 
-function loadData() {
+function loadData(page) {
   $("#data > tbody").empty();
 
-  $.getJSON('/tasks?', function (data) {
+  $.getJSON('/tasks?page=' + page, function(data) {
     var i;
 
     for (i = 0; i < data.length; i++) {
