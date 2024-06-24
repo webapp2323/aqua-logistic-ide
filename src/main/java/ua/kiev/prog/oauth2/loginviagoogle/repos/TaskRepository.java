@@ -13,8 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    List<Task> findByAccountEmail(String email);
-
+    List<Task> findAllByAccountEmail(String email);
     List<Task> findByAccountEmailAndStatus(String email, TaskStatus status, Pageable pageable);
 
     List<Task> findAll();

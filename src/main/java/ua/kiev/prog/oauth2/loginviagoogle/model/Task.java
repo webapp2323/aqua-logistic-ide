@@ -1,23 +1,16 @@
 package ua.kiev.prog.oauth2.loginviagoogle.model;
 
-import java.util.Date;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskStatus;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Task {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Temporal(TemporalType.TIMESTAMP)
@@ -35,77 +28,39 @@ public class Task {
   @JoinColumn(name = "account_id")
   private Account account;
 
+  @ManyToOne
+  @JoinColumn(name = "product_id")
+  private Product product;
+
   public Task() {}
 
-  public Task(Date date, String address, String phone, int quantity, long price, TaskStatus status) {
+  public Task(Date date, String address, String phone, int quantity, long price, TaskStatus status, Product product) {
     this.date = date;
     this.address = address;
     this.phone = phone;
     this.quantity = quantity;
     this.price = price;
     this.status = status;
+    this.product = product;
   }
 
-  public static Task of(Date date, String address, String phone, int quantity, long price, TaskStatus status) {
-    return new Task(date, address, phone, quantity, price, status);
+  public static Task of(Date date, String address, String phone, int quantity, long price, TaskStatus status, Product product) {
+    return new Task(date, address, phone, quantity, price, status, product);
   }
 
-  public static Task fromDTO(TaskDTO taskDTO) {
-    return Task.of(taskDTO.getDate(), taskDTO.getAddress(), taskDTO.getPhone(),
-        taskDTO.getQuantity(), taskDTO.getPrice(), taskDTO.getStatus());
+  public static Task fromDTO(TaskDTO taskDTO, Product product) {
+    return Task.of(taskDTO.getDate(), taskDTO.getAddress(), taskDTO.getPhone(), taskDTO.getQuantity(), taskDTO.getPrice(), taskDTO.getStatus(), product);
   }
-
 
   public TaskDTO toDTO() {
-    return TaskDTO.of(id, date, address, phone, quantity, price, account.getEmail(), status);
+    return TaskDTO.of(id, date, address, phone, quantity, price, account != null ? account.getEmail() : null, status, product != null ? product.getId() : null);
   }
-
   public Long getId() {
     return id;
   }
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public Date getDate() {
-    return date;
-  }
-
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
-  public String getAddress() {
-    return address;
-  }
-
-  public void setAddress(String address) {
-    this.address = address;
-  }
-
-  public String getPhone() {
-    return phone;
-  }
-
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
-
-  public int getQuantity() {
-    return quantity;
-  }
-
-  public void setQuantity(int quantity) {
-    this.quantity = quantity;
-  }
-
-  public long getPrice() {
-    return price;
-  }
-
-  public void setPrice(long price) {
-    this.price = price;
   }
 
   public Account getAccount() {

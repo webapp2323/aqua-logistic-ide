@@ -1,22 +1,22 @@
 package ua.kiev.prog.oauth2.loginviagoogle.config;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.AccountDTO;
-import ua.kiev.prog.oauth2.loginviagoogle.dto.TaskDTO;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.UserRole;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
+
 
 @Component
 public class AuthHandler implements AuthenticationSuccessHandler {
@@ -27,37 +27,24 @@ public class AuthHandler implements AuthenticationSuccessHandler {
     this.generalService = generalService;
   }
 
-  /**
-   * Is called when user logs in with Google or Facebook credentials.
-   *
-   * @param httpServletRequest
-   * @param httpServletResponse
-   * @param authentication
-   * @throws IOException
-   */
   @Override
-  public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
-      HttpServletResponse httpServletResponse,
-      Authentication authentication) throws IOException {
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
     OAuth2AuthenticationToken token = (OAuth2AuthenticationToken) authentication;
     OAuth2User user = token.getPrincipal();
-
     Map<String, Object> attributes = user.getAttributes();
 
     String email = (String) attributes.get("email");
-    String password = (String) attributes.get("password");
+    String password = "N/A";
 
-    AccountDTO accountDTO = AccountDTO.of(UserRole.USER,
-        email,
-        password,
-        (String) attributes.get("name"),
-        getPictureUrl(attributes)
-    );
+    AccountDTO accountDTO = AccountDTO.of(email, UserRole.USER , password, (String) attributes.get("name"), getPictureUrl(attributes));
     Account account = generalService.getAccountByEmail(email);
     if (account == null) {
       generalService.addAccount(accountDTO);
     }
-    httpServletResponse.sendRedirect("/index1.html");
+
+    response.setContentType("application/json");
+    response.setCharacterEncoding("UTF-8");
+    new ObjectMapper().writeValue(response.getWriter(), accountDTO);
   }
 
   private String getPictureUrl(Map<String, Object> attributes) {

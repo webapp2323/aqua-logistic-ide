@@ -18,7 +18,6 @@ import ua.kiev.prog.oauth2.loginviagoogle.services.GeneralService;
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
-  // @Value("${spring.mail.username}")
   @Value("${spring.mail.username}")
   private String fromAddress;
 
@@ -34,17 +33,5 @@ public class AppConfig {
     return message;
   }
 
-  @Bean
-  public CommandLineRunner demo(final GeneralService generalService,
-      final PasswordEncoder passwordEncoder) {
-    return strings -> {
-      AccountDTO accountDTO = AccountDTO.of(UserRole.ADMIN,
-          "admin@admin.com",
-          passwordEncoder.encode("password"),
-          "Admin", "");
-      if (generalService.getAccountByEmail("admin@admin.com") == null) {
-        generalService.addAccount(accountDTO);
-      }
-    };
-  }
+
 }
