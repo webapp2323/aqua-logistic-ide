@@ -1,19 +1,12 @@
 package ua.kiev.prog.oauth2.loginviagoogle.services;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Service;
 import ua.kiev.prog.oauth2.loginviagoogle.dto.UserRole;
 import ua.kiev.prog.oauth2.loginviagoogle.model.Account;
 import ua.kiev.prog.oauth2.loginviagoogle.repos.AccountRepository;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
 @Service
