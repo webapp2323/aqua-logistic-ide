@@ -8,5 +8,6 @@
 
     <include file="sql/1-init-schema.sql" relativeToChangelogFile="true"/>
     <include file="sql/2-add-product-to-task.sql" relativeToChangelogFile="true"/>
+    <include file="sql/3-update-auto-increment.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
