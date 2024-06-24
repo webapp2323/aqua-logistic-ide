@@ -64,8 +64,6 @@ public class GeneralServiceImpl implements GeneralService {
         Account account = accountRepository.findByEmail(email);
         if (account != null) {
             Product product = productRepository.findById(taskDTO.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
-            long price = taskDTO.getQuantity() * product.getUnitPrice();
-            taskDTO.setPrice(price);
             Task task = Task.fromDTO(taskDTO, product);
             account.addTask(task);
             accountRepository.save(account);
