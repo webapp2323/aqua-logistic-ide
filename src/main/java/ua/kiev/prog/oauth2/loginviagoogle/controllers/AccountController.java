@@ -33,7 +33,7 @@ public class AccountController {
     @GetMapping("/count")
     public ResponseEntity<PageCountDTO> count(@AuthenticationPrincipal Object principal) {
         String email = authService.getEmailFromPrincipal(principal);
-        boolean isAdmin = authService.isAdmin(principal);
+        boolean isAdmin = authService.isAdmin();
         PageCountDTO countDTO = isAdmin
                 ? PageCountDTO.of(generalService.countAllTasks(), PAGE_SIZE)
                 : PageCountDTO.of(generalService.count(email), PAGE_SIZE);

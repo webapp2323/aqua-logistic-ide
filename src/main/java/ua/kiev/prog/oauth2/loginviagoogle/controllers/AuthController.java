@@ -9,6 +9,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,8 @@ import ua.kiev.prog.oauth2.loginviagoogle.services.jwt.JwtTokenUtil;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.List;
 
 
 @RestController
@@ -56,12 +60,13 @@ public class AuthController {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String token = jwtTokenUtil.generateToken(userDetails.getUsername());
+            String token = jwtTokenUtil.generateToken(userDetails);
             return ResponseEntity.ok(new AuthResponse(token));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
         }
     }
+
 
     @PostMapping("/oauth2/success")
     public ResponseEntity<?> oauth2Success(@RequestHeader("X-Google-Token") String googleToken) {
@@ -75,8 +80,12 @@ public class AuthController {
             String email = payload.getEmail();
 
             Account user = authService.registerOAuthUserIfNotExist(email);
-
-            String jwtToken = jwtTokenUtil.generateToken(user.getEmail());
+            UserDetails userDetails = User.builder()
+                    .username(user.getEmail())
+                    .password("")
+                    .authorities(List.of(new SimpleGrantedAuthority(user.getRole().toString())))
+                    .build();
+            String jwtToken = jwtTokenUtil.generateToken(userDetails);
 
             return ResponseEntity.ok(new AuthResponse(jwtToken));
         } catch (GeneralSecurityException | IOException e) {

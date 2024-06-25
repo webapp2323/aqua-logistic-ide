@@ -5,13 +5,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -49,11 +53,13 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(String username) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, username);
+        claims.put("roles", userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList()));
+        return doGenerateToken(claims, userDetails.getUsername());
     }
-
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
@@ -63,6 +69,7 @@ public class JwtTokenUtil {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 
     public Boolean validateToken(String token, String username) {
         final String usernameFromToken = getUsernameFromToken(token);
@@ -80,5 +87,9 @@ public class JwtTokenUtil {
                 .setClaims(claims)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
+    }
+    public List<String> getRolesFromToken(String token) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claims.get("roles", List.class);
     }
 }

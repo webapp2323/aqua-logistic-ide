@@ -34,7 +34,7 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<List<TaskDTO>> getAllTasks(@AuthenticationPrincipal Object principal, @RequestParam(defaultValue = "0") int page) {
         String email = authService.getEmailFromPrincipal(principal);
-        boolean isAdmin = authService.isAdmin(principal);
+        boolean isAdmin = authService.isAdmin();
         List<TaskDTO> tasks = isAdmin
                 ? generalService.getAllTasks(PageRequest.of(page, PAGE_SIZE, Sort.Direction.DESC, "id"))
                 : generalService.getTasksByStatus(email, TaskStatus.NEW, PageRequest.of(page, PAGE_SIZE, Sort.Direction.DESC, "id"));

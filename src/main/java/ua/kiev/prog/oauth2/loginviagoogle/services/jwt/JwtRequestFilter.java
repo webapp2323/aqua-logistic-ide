@@ -3,6 +3,7 @@ package ua.kiev.prog.oauth2.loginviagoogle.services.jwt;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,8 +63,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             if (user == null) {
                 user = authService.registerOAuthUserIfNotExist(username);
             }
-
-            userDetails = new org.springframework.security.core.userdetails.User(user.getEmail(), "", new ArrayList<>());
+            List<String> roles = jwtTokenUtil.getRolesFromToken(jwtToken);
+            List<GrantedAuthority> authorities = roles.stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(Collectors.toList());
+            userDetails = new org.springframework.security.core.userdetails.User(user.getEmail(), "", authorities);
 
             if (jwtTokenUtil.validateToken(jwtToken, userDetails.getUsername())) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(

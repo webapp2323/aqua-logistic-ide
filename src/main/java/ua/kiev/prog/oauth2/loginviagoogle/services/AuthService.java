@@ -1,5 +1,8 @@
 package ua.kiev.prog.oauth2.loginviagoogle.services;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -10,13 +13,10 @@ import ua.kiev.prog.oauth2.loginviagoogle.repos.AccountRepository;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final AccountRepository accountRepository;
-
-    public AuthService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
 
     public String getEmailFromPrincipal(Object principal) {
         if (principal instanceof UserDetails) {
@@ -27,13 +27,11 @@ public class AuthService {
         return null;
     }
 
-    public boolean isAdmin(Object principal) {
-        if (principal instanceof UserDetails) {
-            return ((UserDetails) principal).getAuthorities().stream()
-                    .anyMatch(role -> "ROLE_ADMIN".equalsIgnoreCase(role.getAuthority()));
-        } else if (principal instanceof OAuth2User) {
-            return ((OAuth2User) principal).getAuthorities().stream()
-                    .anyMatch(role -> "ROLE_ADMIN".equalsIgnoreCase(role.getAuthority()));
+    public boolean isAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            return authentication.getAuthorities().stream()
+                    .anyMatch(grantedAuthority -> "ROLE_ADMIN".equals(grantedAuthority.getAuthority()));
         }
         return false;
     }
